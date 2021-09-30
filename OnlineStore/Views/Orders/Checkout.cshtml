@@ -1,0 +1,162 @@
+﻿@model ICollection<OnlineStore.Models.OrderItem>
+@{
+    ViewBag.Title = "Checkout";
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+
+
+<!-- banner-2 -->
+<div class="page-head_agile_info_w3l">
+
+</div>
+<!-- //banner-2 -->
+<!-- page -->
+<div class="services-breadcrumb">
+    <div class="agile_inner_breadcrumb">
+        <div class="container">
+            <ul class="w3_short">
+                <li>
+                    <a href="/">Home</a>
+                    <i>|</i>
+                </li>
+                <li>Checkout</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- //page -->
+<!-- checkout page -->
+<div class="privacy py-sm-5 py-4">
+    <div class="container py-xl-4 py-lg-2">
+        <!-- tittle heading -->
+        <h3 class="tittle-w3l text-center mb-lg-5 mb-sm-4 mb-3">
+            <span>C</span>heckout
+        </h3>
+        <!-- //tittle heading -->
+        <div class="checkout-right">
+            <h4 class="mb-sm-4 mb-3">
+                Your shopping cart contains:
+                <span>@Model.Count Products</span>
+            </h4>
+            <div class="table-responsive">
+                <table class="timetable_sub">
+                    <thead>
+                        <tr>
+                            <th>SL No.</th>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ decimal total = 0; }
+                        @foreach (var item in Model)
+                        {
+                            total += item.Product.Price - item.Product.Price * item.Product.Discount;
+                            <tr class="rem1">
+                                <td class="invert">@item.Id</td>
+                                <td class="invert-image">
+                                    <a href="/products/details/@item.Product.Id">
+                                        <img src="~/Images/@item.Product.img" alt=" " class="img-responsive">
+                                    </a>
+                                </td>
+                                <td class="invert">
+                                    <div class="entry value">
+                                        <span>@item.Quantity</span>
+                                    </div>
+                                </td>
+                                <td class="invert">@item.Product.Name</td>
+                                <td class="invert">$@(item.Product.Price - item.Product.Price * item.Product.Discount)</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Total $ @total</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @if (Model.Count != 0)
+        {
+            <div class="checkout-left">
+                <div class="address_form_agile mt-sm-5 mt-4">
+                    <h4 class="mb-sm-4 mb-3">Add a new Details</h4>
+                    <div class="creditly-card-form agileinfo_form">
+                        <div class="creditly-wrapper wthree, w3_agileits_wrapper">
+                            <div class="information-wrapper">
+                                <div class="first-row">
+                                    @*<div class="controls form-group">
+            <input class="billing-address-name form-control" type="text" name="name" placeholder="Full Name" required="">
+        </div>
+        <div class="w3_agileits_card_number_grids">
+            <div class="w3_agileits_card_number_grid_left form-group">
+                <div class="controls">
+                    <input type="text" class="form-control" placeholder="Mobile Number" name="number" required="">
+                </div>
+            </div>
+            <div class="w3_agileits_card_number_grid_right form-group">
+                <div class="controls">
+                    <input type="text" class="form-control" placeholder="Landmark" name="landmark" required="">
+                </div>
+            </div>
+        </div>
+        <div class="controls form-group">
+            <input type="text" class="form-control" placeholder="Town/City" name="city" required="">
+        </div>
+        <div class="controls form-group">
+            <select id="select">
+                <option>Select Payment Method..</option>
+                <option value="cash">Cash on Delivery</option>
+                <option value="paypal">Pay with Paypal</option>
+            </select>
+        </div>*@
+                                    @using (Html.BeginForm("Payment", "Orders"))
+                                    {
+                                        <div class="controls form-group">
+                                            @Html.TextBox("FullName", null, new { @class = "billing-address-name form-control", placeholder = "Full Name" })
+                                        </div>
+                                        <div class="w3_agileits_card_number_grids">
+                                            <div class="w3_agileits_card_number_grid_left form-group">
+                                                <div class="controls">
+                                                    @Html.TextBox("MobileNumber", null, new { @class = "form-control", placeholder = "Mobile Number" })
+                                                </div>
+                                            </div>
+                                            <div class="w3_agileits_card_number_grid_right form-group">
+                                                <div class="controls">
+                                                    @Html.TextBox("Landmark", null, new { @class = "form-control", placeholder = "Landmark" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="controls form-group">
+                                            @Html.TextBox("City", null, new { @class = "form-control", placeholder = "City" })
+                                        </div>
+                                        <div class="controls form-group">
+                                            @Html.DropDownList("PaymentMethod", new List<SelectListItem>
+{
+   new SelectListItem{ Text="Pay With Paypal", Value = "paypal" },
+   new SelectListItem{ Text="Cash on Delivery", Value = "cash" },
+})
+                                        </div>
+                                        <div class="checkout-right-basket">
+                                            <button type="submit" class="btn btn-lg btn-primary">
+                                                Complete It
+                                                <span class="far fa-hand-point-right"></span>
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<!-- //checkout page -->

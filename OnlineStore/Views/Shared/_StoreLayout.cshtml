@@ -1,0 +1,611 @@
+﻿<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>@ViewBag.Title</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="OnlineStore, web app, devices Nokia, Samsung, LG, Sony, Lenovo" />
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <link href="~/Content/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="~/Content/css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="~/Content/css/fontawesome-all.css" rel="stylesheet">
+    <link href="~/Content/css/menu.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="~/Content/css/flexslider.css" rel="stylesheet" />
+</head>
+
+<body>
+    @using Microsoft.AspNet.Identity
+
+    <!-- top-header -->
+    <div class="agile-main-top">
+        <div class="container-fluid">
+            <div class="row main-top-w3l py-2">
+                <div class="col-lg-4 header-most-top">
+                    <p class="text-white text-lg-left text-center">
+                        Offer Zone Top Deals & Discounts
+                        <i class="fas fa-shopping-cart ml-1"></i>
+                    </p>
+                </div>
+                <div class="col-lg-8 header-right mt-lg-0 mt-2">
+                    <!-- header lists -->
+                    <ul>
+                        @if (Request.IsAuthenticated)
+                        {
+                            using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <li class="text-center border-right text-white">
+                                    @Html.ActionLink("Hi! " + User.Identity.Name.Split(new char[] { '@' })[0] + "   ", "Index", "Manage", routeValues: null, htmlAttributes: new { @class = "text-center text-white" })
+                                </li>
+                                <li class="text-center text-white">
+                                    <a href="javascript:document.getElementById('logoutForm').submit()" class="text-center text-white">
+                                        <span class="text-center text-white">Log out </span>  <i class="fas fa-sign-out-alt"></i>
+                                    </a>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li class="text-center border-right text-white">
+                                <i class="fas fa-envelope"></i>
+                                <a class="text-white text-center" href="mailto://admin@email.com" target="_blank">
+                                    admin@mail.com
+                                </a>
+                            </li>
+
+                            <li class="text-center text-white">
+                                <a href="/account/login?returnUrl=@Request.Path" title="Account" class="text-white text-center">
+                                    Login <i class="fas fa-user"></i>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                    <!-- //header lists -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //top-header -->
+    <!-- header-bottom-->
+    <div class="header-bot">
+        <div class="container">
+            <div class="row header-bot_inner_wthreeinfo_header_mid">
+                <!-- logo -->
+                <div class="col-md-3 logo_agile">
+                    <h1 class="text-center">
+                        <a href="/" class="font-weight-bold font-italic">
+                            <img src="~/images/logo2.png" alt=" " class="img-fluid">Online<span class="text-primary">Store</span>
+                        </a>
+                    </h1>
+                </div>
+                <!-- //logo -->
+                <!-- header-bot -->
+                <div class="col-md-9 header mt-4 mb-md-0 mb-4">
+                    <div class="row">
+                        <!-- search -->
+                        <div class="col-10 agileits_search">
+                            <form class="form-inline" action="/products/searchProducts" method="post">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Search" name="searchString" id="searchInput" aria-label="Search" required>
+                                <button class="btn my-2 my-sm-0" type="submit">Search</button>
+                            </form>
+                        </div>
+                        <!-- //search -->
+                        <!-- cart details -->
+                        <div class="col-2 top_nav_right text-center mt-sm-0 mt-2">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cart">
+                                <i class="fas fa-cart-arrow-down"></i>
+                            </button>
+                        </div>
+                        <!-- //cart details -->
+                        <!-- Cart Modal -->
+                        <!-- Modal -->
+                        <div class="modal fade" id="cart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Cart</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="show-cart table">
+                                        </table>
+                                        <div>Total price: $<span class="total-cart"></span></div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <a href="/Orders/Checkout" class="btn btn-primary">Order now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //header-bottom -->
+    <!-- navigation -->
+    <div class="navbar-inner">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="agileits-navi_search">
+                    <form method="post" action="/products/ProductByCategory">
+                        <select class="select-box" name="category" onchange="this.form.submit()">
+                            <option value="">All Categories</option>
+                            <option value="Televisions">Televisions</option>
+                            <option value="Headphones">Headphones</option>
+                            <option value="Computers">Computers</option>
+                            <option value="Appliances">Appliances</option>
+                            <option value="Mobiles">Mobiles</option>
+                            <option value="Tablets">iPad & Tablets</option>
+                            <option value="Cameras">Cameras & Camcorders</option>
+                            <option value="HomeAudio">Home Audio & Theater</option>
+                        </select>
+                    </form>
+                </div>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto text-center mr-xl-5">
+                        <li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                @Html.ActionLink("Dashboard", "Dashboard", "Admin", routeValues: null, htmlAttributes: new { @class = "btn btn-info text-center text-white" })
+                            }
+                        </li>
+                        <li class="nav-item mr-lg-2 mb-lg-0 mb-2">
+                            <a href="/Home/Index" class="nav-link">Home<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item dropdown mr-lg-2 mb-lg-0 mb-2">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Electronics
+                            </a>
+                            <div class="dropdown-menu">
+                                <div class="agile_inner_drop_nav_info p-4">
+                                    <h5 class="mb-3">Mobiles, Computers</h5>
+                                    <div class="row">
+                                        <div class="col-sm-6 multi-gd-img">
+                                            <ul class="multi-column-dropdown">
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=Mobiles">Mobiles</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=MobileAccessories">Mobiles Accessories</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=CasesAndCovers">Cases & Covers</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=ScreenProtectors">Screen Protectors</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=PowerBanks">Power Banks</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=AllCertifiedRefurbished">All Certified Refurbished</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=Tablets">Tablets</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=WearableDevices">Wearable Devices</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=SmartHome">Smart Home</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-sm-6 multi-gd-img">
+                                            <ul class="multi-column-dropdown">
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=Laptops">Laptops</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=DrivesAndStorage">Drives & Storage</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=PrintersAndInk">Printers & Ink</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=NetworkingDevices">Networking Devices</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=ComputerAccessories">Computer Accessories</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=GameZone">Game Zone</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=Software">Software</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown mr-lg-2 mb-lg-0 mb-2">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Appliances
+                            </a>
+                            <div class="dropdown-menu">
+                                <div class="agile_inner_drop_nav_info p-4">
+                                    <h5 class="mb-3">TV, Appliances, Electronics</h5>
+                                    <div class="row">
+                                        <div class="col-sm-6 multi-gd-img">
+                                            <ul class="multi-column-dropdown">
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=Televisions">Televisions</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=HomeEntertainmentSystems">Home Entertainment Systems</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=Headphones">Headphones</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=Speakers">Speakers</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=MediaPlayersAccessories">MP3, Media Players & Accessories</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=AudioVideoAccessories">Audio & Video Accessories</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=Cameras">Cameras</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=DSLRCameras">DSLR Cameras</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=CameraAccessories">Camera Accessories</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-sm-6 multi-gd-img">
+                                            <ul class="multi-column-dropdown">
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=MusicalInstruments">Musical Instruments</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=GamingConsoles">Gaming Consoles</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=AllElectronics">All Electronics</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=AirConditioners">Air Conditioners</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=Refrigerators">Refrigerators</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=WashingMachines">Washing Machines</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/products/ProductByCategory?category=Kitchen">Kitchen</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="nav-item mr-lg-2 mb-lg-0 mb-2">
+                            @Html.ActionLink("About Us", "About", "Home", null, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item mr-lg-2 mb-lg-0 mb-2">
+                            <a class="nav-link" href="/products/ProductByFilter?filter=new">New Arrivals</a>
+                        </li>
+
+                        <li class="nav-item">
+                            @Html.ActionLink("Contact Us", "Contact", "Home", null, new { @class = "nav-link" })
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- //navigation -->
+
+    <div>
+        @RenderBody()
+    </div>
+
+    <!-- middle section -->
+    <div class="join-w3l1 py-sm-5 py-4">
+        <div class="container py-xl-4 py-lg-2">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="join-agile text-left p-4">
+                        <div class="row">
+                            <div class="col-sm-7 offer-name">
+                                <h6>Smooth, Rich & Loud Audio</h6>
+                                <h4 class="mt-2 mb-3">Branded Headphones</h4>
+                                <p>Sale up to 25% off all in store</p>
+                            </div>
+                            <div class="col-sm-5 offerimg-w3l">
+                                <img src=@Url.Content("~/images/off1.png") alt="" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mt-lg-0 mt-5">
+                    <div class="join-agile text-left p-4">
+                        <div class="row ">
+                            <div class="col-sm-7 offer-name">
+                                <h6>A Bigger Phone</h6>
+                                <h4 class="mt-2 mb-3">Smart Phones 5</h4>
+                                <p>Free shipping order over $100</p>
+                            </div>
+                            <div class="col-sm-5 offerimg-w3l">
+                                <img src=@Url.Content("~/images/off2.png") alt="" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- middle section -->
+    <!-- footer -->
+    <footer>
+        <div class="footer-top-first">
+            <div class="container py-md-5 py-sm-4 py-3">
+                <!-- footer first section -->
+                <h2 class="footer-top-head-w3l font-weight-bold mb-2">Electronics :</h2>
+                <p class="footer-main mb-4">
+                    If you're considering a new laptop, looking for a powerful new car stereo or shopping for a new HDTV, we make it easy to
+                    find exactly what you need at a price you can afford. We offer Every Day Low Prices on TVs, laptops, cell phones, tablets
+                    and iPads, video games, desktop computers, cameras and camcorders, audio, video and more.
+                </p>
+                <!-- //footer first section -->
+                <!-- footer second section -->
+                <div class="row w3l-grids-footer border-top border-bottom py-sm-4 py-3">
+                    <div class="col-md-4 offer-footer">
+                        <div class="row">
+                            <div class="col-4 icon-fot">
+                                <i class="fas fa-dolly"></i>
+                            </div>
+                            <div class="col-8 text-form-footer">
+                                <h3>Free Shipping</h3>
+                                <p>on orders over $100</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 offer-footer my-md-0 my-4">
+                        <div class="row">
+                            <div class="col-4 icon-fot">
+                                <i class="fas fa-shipping-fast"></i>
+                            </div>
+                            <div class="col-8 text-form-footer">
+                                <h3>Fast Delivery</h3>
+                                <p>World Wide</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 offer-footer">
+                        <div class="row">
+                            <div class="col-4 icon-fot">
+                                <i class="far fa-thumbs-up"></i>
+                            </div>
+                            <div class="col-8 text-form-footer">
+                                <h3>Big Choice</h3>
+                                <p>of Products</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- //footer second section -->
+            </div>
+        </div>
+
+        <!-- footer fourth section -->
+        <div class="agile-sometext py-md-5 py-sm-4 py-3">
+            <div class="container">
+                <!-- payment -->
+                <div class="sub-some child-momu mt-4">
+                    <h5 class="font-weight-bold mb-3">Payment Methods</h5>
+                    <ul>
+                        <li>
+                            <img src="~/images/pay8.png" alt="">
+                        </li>
+                        <li></li>
+                        <li>
+                            <img src="~/images/paypal.png" width="100" height="40" alt="">
+                        </li>
+
+                    </ul>
+                </div>
+                <!-- //payment -->
+            </div>
+        </div>
+        <!-- //footer fourth section (text) -->
+        <!-- footer third section -->
+        <div class="w3l-middlefooter-sec">
+            <div class="container py-md-5 py-sm-4 py-3">
+                <div class="row footer-info w3-agileits-info">
+                    <!-- footer categories -->
+                    <div class="col-md-3 col-sm-6 footer-grids">
+                        <h3 class="text-white font-weight-bold mb-3">Categories</h3>
+                        <ul>
+                            <li class="mb-3">
+                                <a href="/products/ProductByCategory?category=Mobiles">Mobiles </a>
+                            </li>
+                            <li class="mb-3">
+                                <a href="/products/ProductByCategory?category=Computers">Computers</a>
+                            </li>
+                            <li class="mb-3">
+                                <a href="/products/ProductByCategory?category=Tv">TV, Audio</a>
+                            </li>
+                            <li class="mb-3">
+                                <a href="/products/ProductByCategory?category=Smartphones">Smartphones</a>
+                            </li>
+                            <li class="mb-3">
+                                <a href="/products/ProductByCategory?category=WashingMachines">Washing Machines</a>
+                            </li>
+                            <li>
+                                <a href="/products/ProductByCategory?category=Refrigerators">Refrigerators</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- //footer categories -->
+                    <!-- quick links -->
+                    <div class="col-md-3 col-sm-6 footer-grids mt-sm-0 mt-4">
+                        <h3 class="text-white font-weight-bold mb-3">Quick Links</h3>
+                        <ul>
+                            <li class="mb-3">
+                                @Html.ActionLink("About Us", "About", "Home")
+                            </li>
+                            <li class="mb-3">
+                                @Html.ActionLink("Contact Us", "Contact", "Home")
+                            </li>
+                            <li class="mb-3">
+                                @Html.ActionLink("Help", "Help", "Home")
+                            </li>
+                            <li class="mb-3">
+                                @Html.ActionLink("Faqs", "Faqs", "Home")
+                            </li>
+                            <li class="mb-3">
+                                @Html.ActionLink("Terms of use", "Terms", "Home")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Privacy Policy", "Privacy", "Home")
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 col-sm-6 footer-grids mt-md-0 mt-4">
+                        <h3 class="text-white font-weight-bold mb-3">Get in Touch</h3>
+                        <ul>
+                            <li class="mb-3">
+                                <i class="fas fa-map-marker"></i> 123 Sebastian, USA.
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-mobile"></i> 333 222 3333
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-phone"></i> +222 11 4444
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-envelope-open"></i>
+                                <a href="mailto:example@mail.com"> mail 1@example.com</a>
+                            </li>
+                            <li>
+                                <i class="fas fa-envelope-open"></i>
+                                <a href="mailto:example@mail.com"> mail 2@example.com</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 col-sm-6 footer-grids w3l-agileits mt-md-0 mt-4">
+                        <!-- newsletter -->
+                        <h3 class="text-white font-weight-bold mb-3">Newsletter</h3>
+                        <form action="#" method="post">
+                            <div class="form-group">
+                                <input type="email" class="form-control" placeholder="Email" name="email" required="">
+                                <input type="submit" value="Go">
+                            </div>
+                        </form>
+                        <!-- //newsletter -->
+                        <!-- social icons -->
+                        <div class="footer-grids  w3l-socialmk mt-3">
+                            <h3 class="text-white font-weight-bold mb-3">Follow Us on</h3>
+                            <div class="social">
+                                <ul>
+                                    <li>
+                                        <a class="icon fb" href="#">
+                                            <i class="fab fa-facebook-f"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="icon tw" href="#">
+                                            <i class="fab fa-twitter"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="icon gp" href="#">
+                                            <i class="fab fa-google-plus-g"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- //social icons -->
+                    </div>
+                </div>
+                <!-- //quick links -->
+            </div>
+        </div>
+        <!-- //footer third section -->
+    </footer>
+    <!-- //footer -->
+    <!-- copyright -->
+    <div class="copy-right py-3">
+        <div class="container">
+            <p class="text-center text-white">
+                © 2021 OnlineStore. All rights reserved | Design by
+                W3layouts.
+            </p>
+        </div>
+    </div>
+    <!-- //copyright -->
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+    <script src="~/Scripts/js/jquery-2.2.3.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/js/bootstrap.js"></script>
+    <script src="~/Scripts/js/cart.js"></script>
+    
+    <script src="~/Scripts/js/scroll.js"></script>
+    <script src="~/Scripts/js/SmoothScroll.min.js"></script>
+    <script src="~/Scripts/js/move-top.js"></script>
+    <script src="~/Scripts/js/easing.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(".dropdown").hover(
+                function () {
+                    $('.dropdown-menu', this).stop(true, true).slideDown("slow");
+                    $(this).toggleClass('open');
+                },
+                function () {
+                    $('.dropdown-menu', this).stop(true, true).slideUp("slow");
+                    $(this).toggleClass('open');
+                }
+            );
+        });
+    </script>
+    <script>
+        jQuery(document).ready(function ($) {
+            $(".scroll").click(function (event) {
+                event.preventDefault();
+
+                $('html,body').animate({
+                    scrollTop: $(this.hash).offset().top
+                }, 1000);
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $().UItoTop({
+                easingType: 'easeOutQuart'
+            });
+
+        });
+    </script>
+</body>
+</html>

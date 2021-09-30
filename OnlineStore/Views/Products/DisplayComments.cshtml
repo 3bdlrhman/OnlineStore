@@ -1,0 +1,42 @@
+﻿<div data-bind="foreach:comments" class="comment">
+    <div>
+        <br />
+        <div class="panel">
+            # <span data-bind="text:Comment"></span>
+        </div>
+    </div>
+    <br />
+</div>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div>
+        <input type="text" data-bind="value:comment" class="form-control" placeholder="your comment..." />
+        <button type="submit" data-bind="click:save" class="btn btn-info form-control">Add Comment</button>
+    </div>
+}
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script src="~/Scripts/knockout-3.5.1.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<script type="text/javascript">
+    function CommentsViewModel() {
+        var self = this;
+        this.comments = ko.observableArray();
+        this.comment = ko.observable();
+
+        this.init = function () {
+            $.getJSON("/Reviews/GetReview/@ViewContext.RouteData.Values["Id"]", this.comments);
+        }
+
+        this.save = function () {
+            $.post("/Reviews/AddReview/@ViewContext.RouteData.Values["Id"]", { comment: self.comment() }, function (data) {
+                self.comments.push(data);
+            })
+        }
+    }
+    var viewModel = new CommentsViewModel();
+    viewModel.init();
+    ko.applyBindings(viewModel);
+</script>

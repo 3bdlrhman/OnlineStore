@@ -1,0 +1,460 @@
+﻿@model OnlineStore.Models.MainPageViewModel
+@using Microsoft.AspNet.Identity;
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+
+<!-- Home Page banner -->
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <!-- Indicators-->
+    <ol class="carousel-indicators">
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="carousel-item item1 active">
+            <div class="container">
+                <div class="w3l-space-banner">
+                    <div class="carousel-caption p-lg-5 p-sm-4 p-3">
+                        <p>
+                            Get flat
+                            <span>10%</span> Cashback
+                        </p>
+                        <h3 class="font-weight-bold pt-2 pb-lg-5 pb-4">
+                            The
+                            <span>Big</span>
+                            Sale
+                        </h3>
+                        <a class="button2" href="/">Shop Now </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item item2">
+            <div class="container">
+                <div class="w3l-space-banner">
+                    <div class="carousel-caption p-lg-5 p-sm-4 p-3">
+                        <p>
+                            advanced
+                            <span>Wireless</span> earbuds
+                        </p>
+                        <h3 class="font-weight-bold pt-2 pb-lg-5 pb-4">
+                            Best
+                            <span>Headphone</span>
+                        </h3>
+                        <a class="button2" href="/products/SearchProducts?searchString=Headphone">Shop Now </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item item3">
+            <div class="container">
+                <div class="w3l-space-banner">
+                    <div class="carousel-caption p-lg-5 p-sm-4 p-3">
+                        <p>
+                            Get flat
+                            <span>10%</span> Cashback
+                        </p>
+                        <h3 class="font-weight-bold pt-2 pb-lg-5 pb-4">
+                            New
+                            <span>Standard</span>
+                        </h3>
+                        <a class="button2" href="/products/SearchProducts?searchString=cashback">Shop Now </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item item4">
+            <div class="container">
+                <div class="w3l-space-banner">
+                    <div class="carousel-caption p-lg-5 p-sm-4 p-3">
+                        <p>
+                            Get Now
+                            <span>40%</span> Discount
+                        </p>
+                        <h3 class="font-weight-bold pt-2 pb-lg-5 pb-4">
+                            Today
+                            <span>Discount</span>
+                        </h3>
+                        <a class="button2" href="/products/SearchProducts?searchString=discount">Shop Now </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+<!-- //banner -->
+
+<!-- top Products -->
+<div class="ads-grid py-sm-5 py-4">
+    <div class="container py-xl-4 py-lg-2">
+        <!-- tittle heading -->
+        <h3 class="tittle-w3l text-center mb-lg-5 mb-sm-4 mb-3">
+            <span>New</span>  Products
+        </h3>
+        <!-- //tittle heading -->
+
+        <div class="row">
+            <!-- product left -->
+            <div class="agileinfo-ads-display col-lg-9">
+                <div class="wrapper">
+                    <!-- first section -->
+                    <div class="product-sec1 px-sm-4 px-3 py-sm-5  py-3 mb-4">
+                        <h3 class="heading-tittle text-center font-italic">Brand Mobiles</h3>
+                        <div class="row">
+                            @foreach (var item in Model.section1)
+                            {
+                                <div class="col-md-4 product-men mt-5">
+                                    <div class="men-pro-item simpleCart_shelfItem">
+                                        <div class="men-thumb-item text-center">
+                                            <img src=@Url.Content($"~/images/{item.img}") alt="">
+                                            <div class="men-cart-pro">
+
+                                                <div class="inner-men-cart-pro">
+                                                    @Html.ActionLink("Quick View", "Details", "Products", new { id = item.Id }, new { @class = "link-product-add-cart" })
+                                                </div>
+                                            </div>
+                                            @if (item.IsNewArrival)
+                                            {
+                                                <span class="product-new-top">New</span>
+                                            }
+                                        </div>
+                                        <div class="item-info-product text-center border-top mt-4">
+                                            <h4 class="pt-1">
+                                                <a href="single.html"></a>
+                                                @Html.ActionLink(item.Name, "Details", "Products", new { id = item.Id }, new { })
+                                            </h4>
+                                            <div class="info-product-price my-2">
+                                                <span class="item_price">$@(item.Price - item.Price*item.Discount)</span>
+                                                <del>$@item.Price</del>
+                                            </div>
+                                            <div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
+                                                <a href="#" data-name="@item.Name" data-toggle="modal" data-target="#cart" data-id="@item.Id" data-price="@(item.Price - item.Price*item.Discount)" class="add-to-cart btn btn-primary">Add to cart</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <!-- //first section -->
+                    <!-- second section -->
+                    <div class="product-sec1 px-sm-4 px-3 py-sm-5  py-3 mb-4">
+                        <h3 class="heading-tittle text-center font-italic">Tv & Audio</h3>
+                        <div class="row">
+                            @foreach (var item in Model.section2)
+                            {
+                                <div class="col-md-4 product-men mt-5">
+                                    <div class="men-pro-item simpleCart_shelfItem">
+                                        <div class="men-thumb-item text-center">
+                                            <img src=@Url.Content($"~/images/{item.img}") alt="">
+
+                                            <div class="men-cart-pro">
+
+                                                <div class="inner-men-cart-pro">
+                                                    @Html.ActionLink("Quick View", "Details", "Products", new { id = item.Id }, new { @class = "link-product-add-cart" })
+                                                </div>
+                                            </div>
+                                            @if (item.IsNewArrival)
+                                            {
+                                                <span class="product-new-top">New</span>
+                                            }
+                                        </div>
+                                        <div class="item-info-product text-center border-top mt-4">
+                                            <h4 class="pt-1">
+                                                <a href="single.html"></a>
+                                                @Html.ActionLink(item.Name, "Details", "Products", new { id = item.Id }, new { })
+                                            </h4>
+                                            <div class="info-product-price my-2">
+                                                <span class="item_price">$@(item.Price - item.Price*item.Discount)</span>
+                                                <del>$@item.Price</del>
+                                            </div>
+                                            <div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
+                                                <a href="#" data-name="@item.Name" data-toggle="modal" data-target="#cart" data-id="@item.Id" data-price="@(item.Price- item.Price* item.Discount)" class="add-to-cart btn btn-primary">Add to cart</a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <!-- //second section -->
+                    <!-- third section -->
+                    <div class="product-sec1 product-sec2 px-sm-5 px-3">
+                        <div class="row">
+                            <h3 class="col-md-4 effect-bg">Summer Carnival</h3>
+
+                            <div class="col-md-8 bg-right-nut">
+                                <img src="~/images/image1.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //third section -->
+                    <!-- fourth section -->
+                    <div class="product-sec1 px-sm-4 px-3 py-sm-5  py-3 mt-4">
+                        <h3 class="heading-tittle text-center font-italic">Large Appliances</h3>
+                        <div class="row">
+                            @foreach (var item in Model.section3)
+                            {
+                                <div class="col-md-4 product-men mt-5">
+                                    <div class="men-pro-item simpleCart_shelfItem">
+                                        <div class="men-thumb-item text-center">
+                                            <img src=@Url.Content($"~/images/{item.img}") alt="">
+                                            <div class="men-cart-pro">
+
+                                                <div class="inner-men-cart-pro">
+                                                    @Html.ActionLink("Quick View", "Details", "Products", new { id = item.Id }, new { @class = "link-product-add-cart" })
+                                                </div>
+                                            </div>
+                                            @if (item.IsNewArrival)
+                                            {
+                                                <span class="product-new-top">New</span>
+                                            }
+                                        </div>
+                                        <div class="item-info-product text-center border-top mt-4">
+                                            <h4 class="pt-1">
+                                                <a href="single.html"></a>
+                                                @Html.ActionLink(item.Name, "Details", "Products", new { id = item.Id }, new { })
+                                            </h4>
+                                            <div class="info-product-price my-2">
+                                                <span class="item_price">$@(item.Price - item.Price*item.Discount)</span>
+                                                <del>$@item.Price</del>
+                                            </div>
+                                            <div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
+                                                <a href="#" data-name="@item.Name" data-toggle="modal" data-target="#cart" data-id="@item.Id" data-price="@(item.Price - item.Price*item.Discount)" class="add-to-cart btn btn-primary">Add to cart</a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                    </div>
+                    <ul class="pagination">
+                        <li>
+                            <a href="?page=@ViewBag.previousPage" class="btn btn-default">Previous</a>
+                        </li>..
+                        <li>
+                            <a href="?page=@ViewBag.nextPage" class="btn btn-default">Next</a>
+                        </li>
+                    </ul>
+                    <!-- //fourth section -->
+                </div>
+            </div>
+            <!-- //product left -->
+            <!-- product right -->
+            <div class="col-lg-3 mt-lg-0 mt-4 p-lg-0">
+                <div class="side-bar p-sm-4 p-3">
+                    <div class="search-hotel border-bottom py-2">
+                        <h3 class="agileits-sear-head mb-3">Search Here..</h3>
+                        <form action="/products/searchProducts" method="post">
+                            <input type="search" placeholder="Product name..." name="searchString" required="">
+                            <input type="submit" value=" ">
+                        </form>
+                    </div>
+
+                    <!-- price -->
+                    <div class="range border-bottom py-2">
+                        <h3 class="agileits-sear-head mb-3">Price</h3>
+                        <div class="w3l-range">
+                            <ul>
+                                <li>
+                                    <a href="/products/ProductByFilter?filter=Price&value=1000">Under $1,000</a>
+                                </li>
+                                <li class="my-1">
+                                    <a href="/products/ProductByFilter?filter=Price&value=5000">$1,000 - $5,000</a>
+                                </li>
+                                <li>
+                                    <a href="/products/ProductByFilter?filter=Price&value=10000">$5,000 - $10,000</a>
+                                </li>
+                                <li class="my-1">
+                                    <a href="/products/ProductByFilter?filter=Price&value=20000">$10,000 - $20,000</a>
+                                </li>
+                                <li>
+                                    <a href="/products/ProductByFilter?filter=Price&value=30000">$20,000 - $30,000</a>
+                                </li>
+                                <li class="mt-1">
+                                    <a href="/products/ProductByFilter?filter=Price&value=35000">Over $30,000</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- //price -->
+                    <!-- reviews -->
+                    <div class="customer-rev border-bottom left-side py-2">
+                        <h3 class="agileits-sear-head mb-3">Customer Review</h3>
+                        <ul>
+                            <li>
+                                <a href="/products/ProductByFilter?filter=CustomerReview&value=5">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <span>5.0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/products/ProductByFilter?filter=CustomerReview&value=4">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <span>4.0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/products/ProductByFilter?filter=CustomerReview&value=3.5">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half"></i>
+                                    <span>3.5</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/products/ProductByFilter?filter=CustomerReview&value=3">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <span>3.0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/products/ProductByFilter?filter=CustomerReview&value=2.5">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half"></i>
+                                    <span>2.5</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- //reviews -->
+                    <!-- discounts -->
+                    <div class="left-side border-bottom py-2">
+                        <h3 class="agileits-sear-head mb-3">Discount</h3>
+                        <ul>
+                            <li>
+                                <a href="/products/ProductByFilter?filter=Discount&value=0.05"><span class="span">5% or More</span></a>
+                            </li>
+                            <li>
+                                <a href="/products/ProductByFilter?filter=Discount&value=0.10"><span class="span">10% or More</span></a>
+                            </li>
+                            <li>
+                                <a href="/products/ProductByFilter?filter=Discount&value=0.20"><span class="span">20% or More</span></a>
+                            </li>
+                            <li>
+                                <a href="/products/ProductByFilter?filter=Discount&value=0.30"><span class="span">30% or More</span></a>
+                            </li>
+                            <li>
+                                <a href="/products/ProductByFilter?filter=Discount&value=0.50"><span class="span">50% or More</span></a>
+                            </li>
+                            <li>
+                                <a href="/products/ProductByFilter?filter=Discount&value=0.60"><span class="span">60% or More</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- //discounts -->
+                    <!-- electronics -->
+                    <div class="left-side border-bottom py-2">
+                        <h3 class="agileits-sear-head mb-3">Electronics</h3>
+                        <ul>
+                            <li>
+                                <input type="checkbox" class="checked" onclick='window.location.assign("/products/productByCategory?category=Accessories")'>
+                                <span class="span">Accessories</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked" name="Cameras" onclick='window.location.assign("/products/productByCategory?category=Cameras")'>
+                                <span class="span">Cameras & Photography</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked" onclick='window.location.assign("/products/productByCategory?category=Electronics")'>
+                                <span class="span">Car & Vehicle Electronics</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked" onclick='window.location.assign("/products/productByCategory?category=Computers")'>
+                                <span class="span">Computers & Accessories</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked" onclick='window.location.assign("/products/productByCategory?category=Accessories")'>
+                                <span class="span">GPS & Accessories</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked" onclick='window.location.assign("/products/productByCategory?category=Headphones")'>
+                                <span class="span">Headphones</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked" onclick='window.location.assign("/products/productByCategory?category=Audio")'>
+                                <span class="span">Home Audio</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked" onclick='window.location.assign("/products/productByCategory?category=TV")'>
+                                <span class="span">Home Theater, TV & Video</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked" onclick='window.location.assign("/products/productByCategory?category=Mobiles")'>
+                                <span class="span">Mobiles & Accessories</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked" onclick='window.location.assign("/products/productByCategory?category=Media")'>
+                                <span class="span">Portable Media Players</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked" onclick='window.location.assign("/products/productByCategory?category=Tablets")'>
+                                <span class="span">Tablets</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked" onclick='window.location.assign("/products/productByCategory?category=Telephones")'>
+                                <span class="span">Telephones & Accessories</span>
+                            </li>
+                            <li>
+                                <input type="checkbox" class="checked" onclick='window.location.assign("/products/productByCategory?category=WearableTechnology")'>
+                                <span class="span">Wearable Technology</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- //electronics -->
+                    <!-- delivery -->
+                    <div class="left-side border-bottom py-2">
+                        <h3 class="agileits-sear-head mb-3">Cash On Delivery</h3>
+                        <ul>
+                            <li>
+                                <input type="checkbox" class="checked" onclick='window.location.assign("/products/productByFilter?filter=FreeDelivery")'>
+                                <span class="span">Free Delivery</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- //delivery -->
+                    <!-- arrivals -->
+                    <div class="left-side border-bottom py-2">
+                        <h3 class="agileits-sear-head mb-3">New Arrivals</h3>
+                        <ul>
+                            <li>
+                                <input type="checkbox" class="checked" onclick='window.location.assign("/products/productByFilter?filter=new")'>
+                                <span class="span">New Items</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- //arrivals -->
+                </div>
+                <!-- //product right -->
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- //top products -->

@@ -1,0 +1,330 @@
+﻿@model ICollection<OnlineStore.Models.Product>
+@using Microsoft.AspNet.Identity;
+@{
+    ViewBag.Title = "List of Products";
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+}
+<!-- banner-2 -->
+<div class="page-head_agile_info_w3l">
+
+</div>
+<!-- //banner-2 -->
+<!-- page -->
+<div class="services-breadcrumb">
+    <div class="agile_inner_breadcrumb">
+        <div class="container">
+            <ul class="w3_short">
+                <li>
+                    <a href="/">Home</a>
+                    <i>|</i>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- //page -->
+<!-- top Products -->
+<div class="ads-grid py-sm-5 py-4">
+    <div class="container py-xl-4 py-lg-2">
+        <!-- tittle heading -->
+        @if (Model.Count != 0)
+        {
+            <h3 class="tittle-w3l text-center mb-lg-5 mb-sm-4 mb-3">
+                <span>Our Products</span>
+            </h3>
+            <!-- //title heading -->
+            <div class="row">
+                <!-- product left -->
+                <div class="agileinfo-ads-display col-lg-9">
+                    <div class="wrapper">
+
+                        @{ for (var i = 0; i < 3; i++)
+                            {
+                                var count = 0;
+                                <!-- first section -->
+                                <div class="product-sec1 px-sm-4 px-3 py-sm-5  py-3 mb-4">
+                                    <div class="row">
+                                        @foreach (var item in Model.Skip(i * 3).Take(3))
+                                        {
+                                            <div class="col-md-4 product-men">
+                                                <div class="men-pro-item simpleCart_shelfItem">
+                                                    <div class="men-thumb-item text-center">
+                                                        <img src="~/images/@item.img" alt="@item.Name">
+                                                        <div class="men-cart-pro">
+
+                                                            <div class="inner-men-cart-pro">
+                                                                <a href="/products/details/@item.Id" class="link-product-add-cart">Quick Show</a>
+                                                            </div>
+                                                        </div>
+                                                        @if (item.IsNewArrival)
+                                                        {
+                                                            <span class="product-new-top">New</span>
+                                                        }
+                                                    </div>
+                                                    <div class="item-info-product text-center border-top mt-4">
+                                                        <h4 class="pt-1">
+                                                            <a href="/products/details/@item.Id">@item.Name</a>
+                                                        </h4>
+                                                        <div class="info-product-price my-2">
+                                                            <span class="item_price">@(item.Price- item.Price*item.Discount)</span>
+                                                            <del>@item.Price</del>
+                                                        </div>
+                                                        <div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
+                                                            <div class="snipcart-details top_brand_home_details item_add single-item hvr-outline-out">
+                                                                <a href="#" data-name="@item.Name" data-toggle="modal" data-target="#cart" data-id="@item.Id" data-price="@(item.Price- item.Price*item.Discount)" class="add-to-cart btn btn-primary">Add to cart</a>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <!-- //first section -->
+                                count = count + 3;
+                            }
+                        }
+                    </div>
+                </div>
+                <!-- //product left -->
+                <!-- product right -->
+
+                <div class="col-lg-3 mt-lg-0 mt-4 p-lg-0">
+                    <div class="side-bar p-sm-4 p-3">
+                        <div class="search-hotel border-bottom py-2">
+                            <h3 class="agileits-sear-head mb-3">Search Here..</h3>
+                            <form action="/products/searchProducts" method="post">
+                                <input type="search" placeholder="Product name..." name="searchString" required="">
+                                <input type="submit" value=" ">
+                            </form>
+                        </div>
+
+                        <!-- price -->
+                        <div class="range border-bottom py-2">
+                            <h3 class="agileits-sear-head mb-3">Price</h3>
+                            <div class="w3l-range">
+                                <ul>
+                                    <li>
+                                        <a href="/products/ProductByFilter?filter=Price&value=1000">Under $1,000</a>
+                                    </li>
+                                    <li class="my-1">
+                                        <a href="/products/ProductByFilter?filter=Price&value=5000">$1,000 - $5,000</a>
+                                    </li>
+                                    <li>
+                                        <a href="/products/ProductByFilter?filter=Price&value=10000">$5,000 - $10,000</a>
+                                    </li>
+                                    <li class="my-1">
+                                        <a href="/products/ProductByFilter?filter=Price&value=20000">$10,000 - $20,000</a>
+                                    </li>
+                                    <li>
+                                        <a href="/products/ProductByFilter?filter=Price&value=30000">$20,000 - $30,000</a>
+                                    </li>
+                                    <li class="mt-1">
+                                        <a href="/products/ProductByFilter?filter=Price&value=35000">Over $30,000</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- //price -->
+                        <!-- reviews -->
+                        <div class="customer-rev border-bottom left-side py-2">
+                            <h3 class="agileits-sear-head mb-3">Customer Review</h3>
+                            <ul>
+                                <li>
+                                    <a href="/products/ProductByFilter?filter=CustomerReview&value=5">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <span>5.0</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/products/ProductByFilter?filter=CustomerReview&value=4">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <span>4.0</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/products/ProductByFilter?filter=CustomerReview&value=3.5">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half"></i>
+                                        <span>3.5</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/products/ProductByFilter?filter=CustomerReview&value=3">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <span>3.0</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/products/ProductByFilter?filter=CustomerReview&value=2.5">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half"></i>
+                                        <span>2.5</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- //reviews -->
+                        <!-- discounts -->
+                        <div class="left-side border-bottom py-2">
+                            <h3 class="agileits-sear-head mb-3">Discount</h3>
+                            <ul>
+                                <li>
+                                    <a href="/products/ProductByFilter?filter=Discount&value=0.05"><span class="span">5% or More</span></a>
+                                </li>
+                                <li>
+                                    <a href="/products/ProductByFilter?filter=Discount&value=0.10"><span class="span">10% or More</span></a>
+                                </li>
+                                <li>
+                                    <a href="/products/ProductByFilter?filter=Discount&value=0.20"><span class="span">20% or More</span></a>
+                                </li>
+                                <li>
+                                    <a href="/products/ProductByFilter?filter=Discount&value=0.30"><span class="span">30% or More</span></a>
+                                </li>
+                                <li>
+                                    <a href="/products/ProductByFilter?filter=Discount&value=0.50"><span class="span">50% or More</span></a>
+                                </li>
+                                <li>
+                                    <a href="/products/ProductByFilter?filter=Discount&value=0.60"><span class="span">60% or More</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- //discounts -->
+                        <!-- electronics -->
+                        <div class="left-side border-bottom py-2">
+                            <h3 class="agileits-sear-head mb-3">Electronics</h3>
+                            <ul>
+                                <li>
+                                    <input type="checkbox" id="op015" onclick='window.location.assign("/products/productByCategory?category=Accessories")'>
+                                    <label for="op015">Accessories</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="op014" name="Cameras" onclick='window.location.assign("/products/productByCategory?category=Cameras")'>
+                                    <label for="op014">Cameras & Photography</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="op013" onclick='window.location.assign("/products/productByCategory?category=Electronics")'>
+                                    <label for="op013">Car & Vehicle Electronics</label>
+
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="op012" onclick='window.location.assign("/products/productByCategory?category=Computers")'>
+                                    <label for="op012">Computers & Accessories</label>
+
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="op011" onclick='window.location.assign("/products/productByCategory?category=Accessories")'>
+                                    <label for="op011">GPS & Accessories</label>
+
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="op010" onclick='window.location.assign("/products/productByCategory?category=Headphones")'>
+                                    <label for="op010">Headphones</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="op009" onclick='window.location.assign("/products/productByCategory?category=Audio")'>
+                                    <label for="op009">Home Audio</label>
+
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="op008" onclick='window.location.assign("/products/productByCategory?category=TV")'>
+                                    <label for="op008">Home Theater, TV & Video</label>
+
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="op007" onclick='window.location.assign("/products/productByCategory?category=Mobiles")'>
+                                    <label for="op007">Mobiles & Accessories</label>
+
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="op006" onclick='window.location.assign("/products/productByCategory?category=Media")'>
+                                    <label for="op006">Portable Media Players</label>
+
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="op005" onclick='window.location.assign("/products/productByCategory?category=Tablets")'>
+                                    <label for="op005">Tablets</label>
+
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="op004" onclick='window.location.assign("/products/productByCategory?category=Telephones")'>
+                                    <label for="op004">Telephones & Accessories</label>
+
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="op003" onclick='window.location.assign("/products/productByCategory?category=WearableTechnology")'>
+                                    <label for="op003">Wearable Technology</label>
+
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- //electronics -->
+                        <!-- delivery -->
+                        <div class="left-side border-bottom py-2">
+                            <h3 class="agileits-sear-head mb-3">Cash On Delivery</h3>
+                            <ul>
+                                <li>
+                                    <input type="checkbox" id="op002" onclick='window.location.assign("/products/productByFilter?filter=FreeDelivery")'>
+                                    <label for="op002">Free Delivery</label>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- //delivery -->
+                        <!-- arrivals -->
+                        <div class="left-side border-bottom py-2">
+                            <h3 class="agileits-sear-head mb-3">New Arrivals</h3>
+                            <ul>
+                                <li>
+                                    <input type="checkbox" id="op001" onclick='window.location.assign("/products/productByFilter?filter=new")'>
+                                    @*<span class="span">New Items</span>*@
+                                    <label for="op001">New Items</label>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- //arrivals -->
+
+                    </div>
+                    <!-- //product right -->
+                </div>
+
+            </div>
+        }
+        @if (Model.Count == 0)
+        {
+            <h3 class="tittle-w3l text-center mb-lg-5 mb-sm-4 mb-3">
+                <span>There is no items! Try Other Filters</span>
+            </h3>
+        }
+    </div>
+</div>
+<!-- //top products -->
+
+<script src="~/Scripts/js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript">
+    var checkboxValues = JSON.parse(localStorage.getItem('checkboxValues')) || {};
+    var $checkboxes = $(":checkbox");
+
+    $checkboxes.on("change", function () {
+        $checkboxes.each(function () {
+            checkboxValues[this.id] = this.checked;
+        });
+        localStorage.setItem("checkboxValues", JSON.stringify(checkboxValues));
+    });
+
+    $.each(checkboxValues, function (key, value) {
+        $("#" + key).prop('checked', value);
+    });
+</script>
